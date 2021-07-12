@@ -9,6 +9,8 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -49,15 +51,7 @@ public class GuiSewa {
 	private JButton deleteBtn;
 	private JButton kembaliBtn;
 	private JButton editBtn;
-	
-	static final String JDBC_DRIVER ="com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost:3306/sewabuku";
-	static final String USER = "root";
-	static final String PASS = "";
-	
-	static Connection conn;
-	static Statement stmt;
-	static ResultSet rs;
+	private JLabel biayaValLbl;
 	
 	/**
 	 * Launch the application.
@@ -153,7 +147,7 @@ public class GuiSewa {
 		rpLbl.setBounds(336, 123, 34, 21);
 		frame.getContentPane().add(rpLbl);
 		
-		JLabel biayaValLbl = new JLabel("");
+		biayaValLbl = new JLabel("");
 		biayaValLbl.setVerticalAlignment(SwingConstants.TOP);
 		biayaValLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
 		biayaValLbl.setBounds(372, 123, 130, 21);
@@ -164,7 +158,14 @@ public class GuiSewa {
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Biaya();
+			}
+		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		scrollPane.setViewportView(table);
 		
 		JLabel notifTrueLbl = new JLabel("");
@@ -259,6 +260,14 @@ public class GuiSewa {
 		for(Sewa sewa :listSewa) {
 			tableModel.addRow(sewa.toRow());
 		}
+	}
+	public void Biaya() {
+		int row = this.table.getSelectedRow();
+		int biayaSewa = (int) this.tableModel.getValueAt(row, 6);
+		int denda = (int) this.tableModel.getValueAt(row, 5);
+		int total = biayaSewa + denda;
+		String Stotal=Integer.toString(total);
+		this.biayaValLbl.setText(Stotal);
 	}
 	public void Save() {
 		String saveSewa = "f";
