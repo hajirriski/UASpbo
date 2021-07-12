@@ -52,6 +52,7 @@ public class GuiSewa {
 	private JButton kembaliBtn;
 	private JButton editBtn;
 	private JLabel biayaValLbl;
+	private JButton biayaBtn;
 	
 	/**
 	 * Launch the application.
@@ -158,13 +159,9 @@ public class GuiSewa {
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				Biaya();
-			}
-		});
+		
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		
 		scrollPane.setViewportView(table);
 		
@@ -226,6 +223,15 @@ public class GuiSewa {
 		deleteBtn.setBounds(564, 174, 111, 31);
 		frame.getContentPane().add(deleteBtn);
 		
+		biayaBtn = new JButton("Lihat Biaya");
+		biayaBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Biaya();
+			}
+		});
+		biayaBtn.setBounds(400, 94, 111, 23);
+		frame.getContentPane().add(biayaBtn);
+		
 		
 	}
 	public void show() {
@@ -262,9 +268,11 @@ public class GuiSewa {
 		}
 	}
 	public void Biaya() {
-		int row = this.table.getSelectedRow();
-		int biayaSewa = (int) this.tableModel.getValueAt(row, 6);
-		int denda = (int) this.tableModel.getValueAt(row, 5);
+		int row = table.getSelectedRow();
+		String SbiayaSewa = (String) this.tableModel.getValueAt(row, 6);
+		String Sdenda = (String) this.tableModel.getValueAt(row, 5);
+		int biayaSewa = Integer.parseInt(SbiayaSewa);
+		int denda = Integer.parseInt(Sdenda);
 		int total = biayaSewa + denda;
 		String Stotal=Integer.toString(total);
 		this.biayaValLbl.setText(Stotal);
@@ -354,6 +362,5 @@ public class GuiSewa {
 		this.simpanBtn.setText("Simpan");
 		this.judultextField.setText("");
 	}
-	
 }
 
